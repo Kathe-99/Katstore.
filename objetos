@@ -1,0 +1,169 @@
+Use katstore;
+CREATE VIEW Productos_Stock AS
+SELECT ID_Producto, producto, Stock
+FROM productos
+WHERE Stock < 20;
+CREATE VIEW Producto_Mas_Vendido AS
+SELECT 
+    ID_Producto, 
+    nombre AS Producto, 
+    SUM(Cantidad) AS Total_Vendido
+FROM 
+    pedidos
+GROUP BY 
+    ID_Producto, 
+    nombre
+ORDER BY 
+    Total_Vendido DESC
+LIMIT 1;
+
+CREATE VIEW Top_5_Productos_Mas_Vendidos AS
+SELECT 
+    ID_Producto, 
+    nombre AS Producto, 
+    SUM(Cantidad) AS Total_Vendido
+FROM 
+    pedidos
+GROUP BY 
+    ID_Producto, 
+    nombre
+ORDER BY 
+    Total_Vendido DESC
+LIMIT 5;
+
+CREATE VIEW Departamentos_Mas_Envios AS
+SELECT
+    f.Departamento,
+    COUNT(p.ID_Pedido) AS Total_Envios
+FROM
+    Pedidos p
+JOIN
+    Facturas f ON p.ID_Pedido = f.ID_Pedido
+GROUP BY
+    f.Departamento
+ORDER BY
+    Total_Envios DESC;
+    
+CREATE VIEW VistaMetodoDePagoMasUsado AS
+SELECT 
+    Metodo_Pago,
+    COUNT(*) AS Cantidad_Usos
+FROM 
+    detalle_del_pedido
+GROUP BY 
+    Metodo_Pago
+ORDER BY 
+    Cantidad_Usos DESC
+LIMIT 1;
+   Use katstore
+DELIMITER //
+
+CREATE FUNCTION UsuariosPorDepartamento(depto_param VARCHAR(255))
+RETURNS INT
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+    DECLARE total_usuarios INT;
+
+    SELECT COUNT(*) INTO total_usuarios
+    FROM usuarios
+    WHERE departamento = depto_param;
+
+    RETURN total_usuarios;
+END //
+
+DELIMITER //
+
+DELIMITER //
+
+CREATE FUNCTION ContarStockPorProducto(id_producto_param INT)
+RETURNS INT
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+    DECLARE stock_disponible INT;
+
+    SELECT stock INTO stock_disponible
+    FROM productos
+    WHERE id_producto = id_producto_param;
+
+    RETURN stock_disponible;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE ActualizarStock(
+    IN p_id_producto INT,
+    IN p_cantidad INT
+)
+BEGIN
+    IF EXISTS (SELECT 1 FROM productos WHERE id_producto = p_id_producto) THEN
+        UPDATE productos
+        SET stock = p_cantidad
+        WHERE id_producto = p_id_producto;
+    ELSE
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Producto no encontrado.';
+    END IF;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE ObtenerDetallesEnvioPorID(IN pedido_id INT)
+BEGIN
+    SELECT 
+        `ID_pedido`,
+        `Código_envío`,
+        `Fecha_Pedido`,
+        `Fecha_Envío`,
+        `Estado_Envío`,
+        `Empresa_envío`
+    FROM 
+       envíos
+    WHERE 
+        `ID_pedido` = pedido_id;
+END //
+
+DELIMITER ;
+
+Use katstore
+DELIMITER //
+
+CREATE TRIGGER notificar_cambio_telefono
+AFTER UPDATE ON usuarios
+FOR EACH ROW
+BEGIN
+    IF OLD.Telefono <> NEW.Telefono THEN
+        INSERT INTO notificaciones (ID_usuario, mensaje)
+        VALUES (NEW.ID_usuario, CONCAT('El número de teléfono del usuario con ID ', NEW.ID_usuario, ' ha sido actualizado.'));
+    END IF;
+END//
+
+DELIMITER ;
+DELIMITER //
+
+CREATE TRIGGER validar_cantidad_pedido
+BEFORE INSERT ON pedidos
+FOR EACH ROW
+BEGIN
+    IF NEW.Cantidad <= 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La cantidad del pedido debe ser mayor que cero.';
+    END IF;
+END//
+
+CREATE TRIGGER validar_cantidad_pedido_update
+BEFORE UPDATE ON pedidos
+FOR EACH ROW
+BEGIN
+    IF NEW.Cantidad <= 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La cantidad del pedido debe ser mayor que cero.';
+    END IF;
+END//
+
+DELIMITER ;
