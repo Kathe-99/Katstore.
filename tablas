@@ -1,0 +1,72 @@
+Create database Katstore;
+Use Katstore;
+Create table Usuarios (
+ID_Usuario INT primary key,
+Nombre VARCHAR (50), Apellido VARCHAR (50), Edad INT, email VARCHAR (100) UNIQUE NOT NULL, telefono INT, Direccion VARCHAR (100), departamento VARCHAR(50)
+);
+Create table Categoria (
+ID_categoria INT PRIMARY KEY,
+Categoria varchar (50) 
+);
+Create table Productos (
+Id_producto INT primary key, 
+Producto varchar (100), 
+ID_categoria INT, categoria varchar (50), precio Decimal (10,2), stock INT, descripcion varchar (200), 
+FOREIGN KEY (ID_categoria) REFERENCES Categoria(ID_categoria) 
+);
+CREATE TABLE Pedidos (
+    ID_Pedido INT PRIMARY KEY,
+    Cantidad INT NOT NULL,
+    ID_User INT NOT NULL,
+    ID_Producto INT NOT NULL,
+    Nombre VARCHAR(255) NOT NULL,
+    Categoria VARCHAR(255) NOT NULL,
+    Precio DECIMAL(10, 2) NOT NULL,
+    Stock INT NOT NULL,
+    Fecha_Pedido DATE NOT NULL,
+    Total_Pedido DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (ID_User) REFERENCES Usuarios(ID_usuario),
+    FOREIGN KEY (ID_Producto) REFERENCES Productos(ID_producto)
+);
+CREATE TABLE Detalle_del_pedido (
+    ID_Pedido INT PRIMARY KEY,
+    Cantidad INT NOT NULL,
+    Nombre VARCHAR(255) NOT NULL,
+    ID_Categoria INT NOT NULL,
+    Precio DECIMAL(10, 2) NOT NULL,
+    Fecha_Pedido DATE NOT NULL,
+    Fecha_Envio DATE NOT NULL,
+    Estado_Envio VARCHAR(50) NOT NULL,
+    Metodo_Envio VARCHAR(50) NOT NULL,
+    Costo_Envío DECIMAL(10, 2) NOT NULL,
+    Subtotal DECIMAL(10, 2) NOT NULL,
+    Total_Con_Envío DECIMAL(10, 2) NOT NULL,
+    Metodo_Pago VARCHAR(50) NOT NULL,
+    Direccion VARCHAR(255) NOT NULL,
+    Departamento VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Envíos (
+    ID_Pedido INT PRIMARY KEY,
+    Código_Envío INT,
+    Fecha_Pedido DATE,
+    Fecha_Envío DATE,
+    Estado_Envío VARCHAR(50),
+    Empresa_Envío VARCHAR(255)
+);
+CREATE TABLE Facturas (
+    Numero_Factura INT PRIMARY KEY,
+    Producto VARCHAR(255),
+    Apellido VARCHAR(255),
+    Email VARCHAR(255),
+    Fecha_Pedido DATE,
+    ID_User INT,
+    ID_Pedido INT,
+    Cantidad INT,
+    Precio DECIMAL(10, 2),
+    Subtotal DECIMAL(10, 2),
+    Costo_Envio DECIMAL(10, 2),
+    Total_Con_Envio DECIMAL(10, 2),
+    Direccion VARCHAR(255),
+    Departamento VARCHAR(255)
+);
