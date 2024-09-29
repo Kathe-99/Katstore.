@@ -339,9 +339,9 @@ LIMIT 5;
 CREATE VIEW Departamentos_Mas_Envios AS
 SELECT
     f.Departamento,
-    COUNT(p.ID_Pedido) AS Total_Envios
+    COUNT(p.Id_Pedido) AS Total_Envios
 FROM
-    Pedidos
+    Pedidos p
 JOIN
     Facturas f ON p.ID_Pedido = f.ID_Pedido
 GROUP BY
