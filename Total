@@ -1,0 +1,474 @@
+Create database Katstore;
+Use Katstore;
+Create table Usuarios (
+ID_Usuario INT primary key,
+Nombre VARCHAR (50), Apellido VARCHAR (50), Edad INT, email VARCHAR (100) UNIQUE NOT NULL, telefono INT, Direccion VARCHAR (100), departamento VARCHAR(50)
+);
+Create table Categoria (
+ID_categoria INT PRIMARY KEY,
+Categoria varchar (50) 
+);
+Create table Productos (
+Id_producto INT primary key, 
+Producto varchar (100), 
+ID_categoria INT, categoria varchar (50), precio Decimal (10,2), stock INT, descripcion varchar (200), 
+FOREIGN KEY (ID_categoria) REFERENCES Categoria(ID_categoria) 
+);
+CREATE TABLE Pedidos (
+    ID_Pedido INT PRIMARY KEY,
+    Cantidad INT NOT NULL,
+    ID_User INT NOT NULL,
+    ID_Producto INT NOT NULL,
+    Nombre VARCHAR(255) NOT NULL,
+    Categoria VARCHAR(255) NOT NULL,
+    Precio DECIMAL(10, 2) NOT NULL,
+    Stock INT NOT NULL,
+    Fecha_Pedido DATE NOT NULL,
+    Total_Pedido DECIMAL(10, 2) NOT NULL,
+    FOREIGN KEY (ID_User) REFERENCES Usuarios(ID_usuario),
+    FOREIGN KEY (ID_Producto) REFERENCES Productos(ID_producto)
+);
+CREATE TABLE Detalle_del_pedido (
+    ID_Pedido INT PRIMARY KEY,
+    Cantidad INT NOT NULL,
+    Nombre VARCHAR(255) NOT NULL,
+    ID_Categoria INT NOT NULL,
+    Precio DECIMAL(10, 2) NOT NULL,
+    Fecha_Pedido DATE NOT NULL,
+    Fecha_Envio DATE NOT NULL,
+    Estado_Envio VARCHAR(50) NOT NULL,
+    Metodo_Envio VARCHAR(50) NOT NULL,
+    Costo_Envío DECIMAL(10, 2) NOT NULL,
+    Subtotal DECIMAL(10, 2) NOT NULL,
+    Total_Con_Envío DECIMAL(10, 2) NOT NULL,
+    Metodo_Pago VARCHAR(50) NOT NULL,
+    Direccion VARCHAR(255) NOT NULL,
+    Departamento VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE Envíos (
+    ID_Pedido INT PRIMARY KEY,
+    Código_Envío INT,
+    Fecha_Pedido DATE,
+    Fecha_Envío DATE,
+    Estado_Envío VARCHAR(50),
+    Empresa_Envío VARCHAR(255)
+);
+CREATE TABLE Facturas (
+    Numero_Factura INT PRIMARY KEY,
+    Producto VARCHAR(255),
+    Apellido VARCHAR(255),
+    Email VARCHAR(255),
+    Fecha_Pedido DATE,
+    ID_User INT,
+    ID_Pedido INT,
+    Cantidad INT,
+    Precio DECIMAL(10, 2),
+    Subtotal DECIMAL(10, 2),
+    Costo_Envio DECIMAL(10, 2),
+    Total_Con_Envio DECIMAL(10, 2),
+    Direccion VARCHAR(255),
+    Departamento VARCHAR(255)
+);
+
+Use katstore;
+
+INSERT INTO Usuarios (
+    ID_usuario, Nombre, Apellido, Edad, Email, telefono, direccion, Departamento
+) VALUES
+(2001, 'Juan', 'Pérez', 28, 'juan.perez@example.com', '91234567', 'Av. Libertador 1234', 'Montevideo'),
+(2002, 'Ana', 'Gómez', 34, 'ana.gomez@example.com', '92345678', 'Calle 18 de Julio 4567', 'Montevideo'),
+(2003, 'Carlos', 'Rodríguez', 22, 'carlos.rodriguez@example.com', '93456789', 'Rambla 123', 'Punta del Este'),
+(2004, 'María', 'Fernández', 30, 'maria.fernandez@example.com', '94567890', 'Calle Uruguay 789', 'Salto'),
+(2005, 'Javier', 'González', 27, 'javier.gonzalez@example.com', '95678901', 'Av. Brasil 321', 'Paysandú'),
+(2006, 'Lucia', 'Martínez', 40, 'lucia.martinez@example.com', '96789012', 'Calle Sarandí 654', 'Montevideo'),
+(2007, 'Pedro', 'López', 31, 'pedro.lopez@example.com', '97890123', 'Av. Italia 876', 'Colonia'),
+(2008, 'Laura', 'Díaz', 29, 'laura.diaz@example.com', '98901234', 'Calle Artigas 432', 'Tacuarembó'),
+(2009, 'Federico', 'Silva', 45, 'federico.silva@example.com', '91012345', 'Av. 18 de Julio 789', 'Rivera'),
+(2010, 'Paula', 'Torres', 36, 'paula.torres@example.com', '92123456', 'Calle Treinta y Tres 321', 'Montevideo'),
+(2011, 'Martín', 'Castro', 50, 'martin.castro@example.com', '93234567', 'Av. Rivera 654', 'Maldonado'),
+(2012, 'Beatriz', 'Ramírez', 26, 'beatriz.ramirez@example.com', '94345678', 'Calle La Paz 789', 'Durazno'),
+(2013, 'Lucas', 'Romero', 38, 'lucas.romero@example.com', '95456789', 'Av. A. González 123', 'Montevideo'),
+(2014, 'Valentina', 'Castro', 24, 'valentina.castro@example.com', '96567890', 'Calle Sarandí 456', 'Canelones'),
+(2015, 'Nicolás', 'Martínez', 41, 'nicolas.martinez@example.com', '97678901', 'Av. General Flores 789', 'San José'),
+(2016, 'Camila', 'Vázquez', 32, 'camila.vazquez@example.com', '98789012', 'Calle 8 de Octubre 654', 'Montevideo'),
+(2017, 'Sebastián', 'Núñez', 48, 'sebastian.nunez@example.com', '91890123', 'Av. del Libertador 321', 'Treinta y Tres'),
+(2018, 'Jimena', 'Sánchez', 35, 'jimena.sanchez@example.com', '92901234', 'Calle Zorrilla 123', 'Paysandú'),
+(2019, 'Rodrigo', 'Méndez', 29, 'rodrigo.mendez@example.com', '93012345', 'Av. José Batlle y Ordóñez', 'Montevideo'),
+(2020, 'Juliana', 'Herrera', 27, 'juliana.herrera@example.com', '94123456', 'Calle Yaguarón 789', 'Artigas'),
+(2021, 'Emiliano', 'Moreno', 31, 'emiliano.moreno@example.com', '95234567', 'Av. Millán 654', 'Colonia'),
+(2022, 'Solange', 'Alvarado', 22, 'solange.alvarado@example.com', '96345678', 'Calle Arenal 321', 'Tacuarembó'),
+(2023, 'Germán', 'Ortega', 40, 'german.ortega@example.com', '97456789', 'Av. Libertador 789', 'Montevideo'),
+(2024, 'Ana María', 'González', 39, 'anamaría.gonzalez@example.com', '98567890', 'Calle Canelones 456', 'Paysandú'),
+(2025, 'Santiago', 'Paredes', 50, 'santiago.paredes@example.com', '91678901', 'Av. De la Plaza 123', 'San José'),
+(2026, 'Clara', 'Luján', 26, 'clara.lujan@example.com', '92789012', 'Calle España 321', 'Canelones'),
+(2027, 'Francisco', 'Gutiérrez', 28, 'francisco.gutierrez@example.com', '93890123', 'Av. 8 de Octubre 654', 'Montevideo'),
+(2028, 'Gabriela', 'Vega', 33, 'gabriela.vega@example.com', '94901234', 'Calle Ejido 789', 'Durazno'),
+(2029, 'Andrés', 'Ruiz', 37, 'andres.ruiz@example.com', '95012345', 'Av. Sarandí 321', 'Rivera'),
+(2030, 'Natalia', 'Romero', 30, 'natalia.romero@example.com', '96123456', 'Calle Artigas 654', 'Treinta y Tres'),
+(2031, 'Diego', 'Castro', 45, 'diego.castro@example.com', '97234567', 'Av. General Artigas 123', 'Montevideo'),
+(2032, 'Marisol', 'Hernández', 34, 'marisol.hernandez@example.com', '98345678', 'Calle 18 de Julio 432', 'San José'),
+(2033, 'Fernando', 'Silva', 29, 'fernando.silva@example.com', '91456789', 'Av. Brasil 876', 'Paysandú'),
+(2034, 'Florencia', 'López', 26, 'florencia.lopez@example.com', '92567890', 'Calle Libertador 1234', 'Tacuarembó'),
+(2035, 'Joaquín', 'Reyes', 39, 'joaquin.reyes@example.com', '93678901', 'Av. De los Libres 321', 'Montevideo'),
+(2036, 'Leticia', 'Torres', 42, 'leticia.torres@example.com', '94789012', 'Calle Arenal 654', 'Colonia'),
+(2037, 'Sebastián', 'García', 27, 'sebastian.garcia@example.com', '95890123', 'Av. Italia 789', 'Canelones'),
+(2038, 'Brenda', 'Castro', 31, 'brenda.castro@example.com', '96901234', 'Calle de la Unión 321', 'Montevideo'),
+(2039, 'Leonardo', 'González', 44, 'leonardo.gonzalez@example.com', '97012345', 'Av. José Pedro Varela 123', 'Rivera'),
+(2040, 'Mónica', 'Ramírez', 29, 'monica.ramirez@example.com', '98123456', 'Calle Artigas 876', 'Treinta y Tres'),
+(2041, 'Nicolás', 'Vázquez', 35, 'nicolas.vazquez@example.com', '91234567', 'Av. Del Libertador 321', 'Maldonado'),
+(2042, 'Paula', 'Méndez', 38, 'paula.mendez@example.com', '92345678', 'Calle Flores 654', 'San José');
+
+INSERT INTO Categoria (
+    Categoria, ID_Categoria
+) VALUES
+('Teléfonos Móviles', 201),
+('Tabletas', 202),
+('Laptops', 203),
+('Monitores', 204),
+('Auriculares', 205),
+('Teclados', 206),
+('Ratones', 207),
+('Almacenamiento Externo', 208),
+('Cámaras Digitales', 209),
+('Altavoces', 210),
+('Redes', 211),
+('Accesorios de Carga', 212),
+('Audio', 213),
+('Monitor', 214),
+('Seguridad', 215),
+('Wearables', 216),
+('Proyector', 217),
+('Almacenamiento', 218),
+('Accesorios', 219),
+('Smartphone', 220),
+('Laptop', 221),
+('Fotografía', 222),
+('Tablet', 223);
+
+INSERT INTO Productos (
+    ID_Producto, producto, ID_Categoria, Categoria, Descripcion, Precio, Stock
+) VALUES
+(1, 'Smartphone XYZ', 201, 'Teléfonos Móviles', 'Smartphone con pantalla Full HD, 128GB de almacenamiento.', 800, 25),
+(2, 'Smartphone ABC', 201, 'Teléfonos Móviles', 'Smartphone con cámara triple y 64GB de almacenamiento.', 1200, 15),
+(3, 'Tableta Pro 10', 202, 'Tabletas', 'Tableta de 10.1" con 4GB de RAM y 64GB de almacenamiento.', 1500, 30),
+(4, 'Tableta Mini 7', 202, 'Tabletas', 'Tableta compacta de 7" ideal para entretenimiento móvil.', 100, 50),
+(5, 'Laptop Gaming Ultra', 203, 'Laptops', 'Laptop con procesador i7, 16GB de RAM y tarjeta gráfica GTX 1660.', 400, 40),
+(6, 'Laptop Business 15', 203, 'Laptops', 'Laptop con procesador i5, 8GB de RAM y 256GB SSD.', 600, 20),
+(7, 'Monitor 27" 4K', 204, 'Monitores', 'Monitor 27" 4K con tecnología IPS y tiempo de respuesta de 5ms.', 300, 35),
+(8, 'Monitor Curvo 32"', 204, 'Monitores', 'Monitor curvo de 32" con resolución Full HD y tasa de refresco de 144Hz.', 500, 15),
+(9, 'Auriculares Bluetooth X', 205, 'Auriculares', 'Auriculares inalámbricos con cancelación de ruido activa y 20 horas de batería.', 150, 60),
+(10, 'Auriculares In-Ear Y', 205, 'Auriculares', 'Auriculares intraurales con sonido de alta definición y micrófono integrado.', 200, 50),
+(11, 'Teclado Mecánico RGB', 206, 'Teclados', 'Teclado mecánico con retroiluminación RGB y switches Cherry MX.', 400, 10),
+(12, 'Teclado Compacto', 206, 'Teclados', 'Teclado compacto y portátil con conectividad Bluetooth.', 150, 25),
+(13, 'Ratón Ergonómico 3200 DPI', 207, 'Ratones', 'Ratón ergonómico con ajuste de DPI y diseño cómodo para largas sesiones.', 250, 20),
+(14, 'Ratón Gaming 16000 DPI', 207, 'Ratones', 'Ratón para gaming con ajuste de DPI hasta 16000 y retroiluminación RGB.', 350, 15),
+(15, 'Disco Duro Externo 1TB', 208, 'Almacenamiento Externo', 'Disco duro externo de 1TB con conexión USB 3.0 para transferencias rápidas.', 120, 30),
+(16, 'Disco Duro SSD 500GB', 208, 'Almacenamiento Externo', 'Disco SSD de 500GB con alta velocidad de lectura y escritura.', 50, 100),
+(17, 'Cámara DSLR 24MP', 209, 'Cámaras Digitales', 'Cámara DSLR de 24MP con lentes intercambiables y grabación en Full HD.', 200, 20),
+(18, 'Cámara Compacta 20MP', 209, 'Cámaras Digitales', 'Cámara compacta de 20MP con zoom óptico de 10x y pantalla LCD de 3".', 15, 80),
+(19, 'Altavoz Bluetooth X', 210, 'Altavoces', 'Altavoz Bluetooth con sonido estéreo y resistencia al agua.', 100, 50),
+(20, 'Altavoz Smart Y', 210, 'Altavoces', 'Altavoz inteligente con asistente virtual y control por voz.', 70, 40),
+(21, 'Router WiFi AC1200', 211, 'Redes', 'Router WiFi AC1200 con doble banda y cuatro puertos Ethernet.', 350, 30),
+(22, 'Extensor de Red WiFi', 211, 'Redes', 'Extensor de red WiFi para ampliar la cobertura en áreas grandes.', 900, 20),
+(23, 'Cargador Rápido USB-C', 212, 'Accesorios de Carga', 'Cargador rápido USB-C compatible con la mayoría de dispositivos modernos.', 1100, 12),
+(24, 'Cable HDMI 2.1', 212, 'Accesorios de Carga', 'Cable HDMI 2.1 para conexión de alta definición con soporte para 4K y 120Hz.', 130, 45),
+(25, 'Hub USB 3.0', 212, 'Accesorios de Carga', 'Hub USB 3.0 con 4 puertos para expansión rápida y fácil de puertos USB.', 250, 23),
+(26, 'Webcam Razer Kiyo', 213, 'Audio', 'Webcam con iluminación incorporada y grabación Full HD.', 350, 4),
+(27, 'Auriculares JBL Tune 500BT', 214, 'Monitor', 'Auriculares inalámbricos con sonido de alta calidad y batería de larga duración.', 700, 5),
+(28, 'Reloj Amazfit Bip U Pro', 215, 'Seguridad', 'Reloj inteligente con seguimiento de actividad y GPS.', 120, 7),
+(29, 'Proyector Kodak Mini', 216, 'Wearables', 'Proyector láser compacto con 4K y brillo alto.', 250, 12),
+(30, 'Disco duro SSD 1TB', 217, 'Proyector', 'Disco SSD de 1TB con alta velocidad de lectura y escritura.', 900, 22),
+(31, 'Teclado Corsair K55 RGB', 218, 'Almacenamiento', 'Teclado mecánico RGB con retroiluminación y switches de alta durabilidad.', 100, 14),
+(32, 'Smartphone Vivo V21', 216, 'Wearables', 'Smartphone con cámara cuádruple y 128GB de almacenamiento.', 200, 23),
+(33, 'Laptop Acer Aspire 5', 211, 'Redes', 'Laptop con procesador i5, 8GB de RAM y 256GB SSD.', 80, 1),
+(34, 'Monitor Acer R240HY', 219, 'Accesorios', 'Monitor Full HD con panel IPS y diseño ultra delgado.', 60, 2),
+(35, 'Auriculares Beats Solo3', 220, 'Smartphone', 'Auriculares con sonido de alta calidad y batería de larga duración.', 400, 2),
+(36, 'Reloj Garmin Forerunner 245', 221, 'Laptop', 'Reloj inteligente con GPS y seguimiento avanzado de la actividad.', 850, 3),
+(37, 'Proyector Epson Home Cinema 2100', 213, 'Audio', 'Proyector Full HD con tecnología 3LCD y alto brillo.', 500, 4),
+(38, 'Cable de red Cat 6', 222, 'Fotografía', 'Cable de red Cat 6 para redes de alta velocidad.', 800, 5),
+(39, 'Gafas inteligentes Vuzix Blade', 213, 'Audio', 'Gafas inteligentes con display transparente y control por gestos.', 300, 6),
+(40, 'Disco duro externo 8TB', 218, 'Almacenamiento', 'Disco duro externo de 8TB con alta capacidad y rendimiento.', 100, 6),
+(41, 'Altavoz Sonos Play:5', 219, 'Accesorios', 'Altavoz inalámbrico con sonido estéreo de alta fidelidad.', 180, 16),
+(42, 'Smartphone OnePlus 9', 214, 'Monitor', 'Smartphone con cámara cuádruple y 128GB de almacenamiento.', 400, 18),
+(43, 'Laptop MSI Gaming GF65', 222, 'Fotografía', 'Laptop para gaming con procesador i7 y gráfica RTX 2060.', 400, 12),
+(44, 'Monitor Philips 275E1S', 217, 'Proyector', 'Monitor UltraWide con resolución QHD y panel IPS.', 400, 4),
+(45, 'Auriculares Panasonic RP-HF410B', 219, 'Accesorios', 'Auriculares con sonido claro y diseño ergonómico.', 80, 10),
+(46, 'Reloj Fossil Gen 5', 213, 'Audio', 'Reloj inteligente con funciones avanzadas y diseño elegante.', 250, 12),
+(47, 'Proyector ViewSonic M1 Mini', 223, 'Tablet', 'Proyector portátil con batería y resolución 720p.', 400, 1);
+
+INSERT INTO pedidos (
+    fecha_pedido, 
+    id_pedido, 
+    cantidad, 
+    id_user, 
+    id_producto, 
+    nombre, 
+    categoria, 
+    precio, 
+    stock, 
+    total_pedido
+) VALUES
+('2024-01-01', 1080, 6, 2009, 1, 'Smartphone XYZ', 'Teléfonos Móviles', 800, 25, 4800),
+('2024-01-02', 1081, 9, 2010, 2, 'Smartphone ABC', 'Teléfonos Móviles', 1200, 15, 10800),
+('2024-01-03', 1082, 2, 2011, 3, 'Tableta Pro 10', 'Tabletas', 1500, 30, 3000),
+('2024-01-04', 1083, 7, 2012, 4, 'Tableta Mini 7', 'Tabletas', 100, 50, 700),
+('2024-01-05', 1084, 3, 2013, 5, 'Laptop Gaming Ultra', 'Laptops', 400, 40, 1200),
+('2024-01-06', 1085, 8, 2014, 6, 'Laptop Business 15', 'Laptops', 600, 20, 4800),
+('2024-01-07', 1087, 5, 2001, 8, 'Monitor Curvo 32"', 'Monitores', 500, 15, 2500),
+('2024-01-08', 1088, 4, 2002, 9, 'Auriculares Bluetooth X', 'Auriculares', 150, 60, 600),
+('2024-01-09', 1089, 6, 2003, 10, 'Auriculares In-Ear Y', 'Auriculares', 200, 50, 1200),
+('2024-01-10', 1090, 9, 2004, 11, 'Teclado Mecánico RGB', 'Teclados', 400, 10, 3600),
+('2024-01-11', 1091, 2, 2005, 21, 'Router WiFi AC1200', 'Redes', 350, 30, 700),
+('2024-01-12', 1092, 7, 2006, 22, 'Extensor de Red WiFi', 'Redes', 900, 20, 6300),
+('2024-01-13', 1093, 3, 2007, 23, 'Cargador Rápido USB-C', 'Accesorios de Carga', 1100, 12, 3300),
+('2024-01-14', 1094, 8, 2008, 24, 'Cable HDMI 2.1', 'Accesorios de Carga', 130, 45, 1040),
+('2024-01-15', 1095, 1, 2009, 1, 'Smartphone XYZ', 'Teléfonos Móviles', 800, 25, 800),
+('2024-01-16', 1096, 5, 2010, 2, 'Smartphone ABC', 'Teléfonos Móviles', 1200, 15, 6000),
+('2024-01-17', 1097, 4, 2011, 8, 'Monitor Curvo 32"', 'Monitores', 500, 15, 2000),
+('2024-01-18', 1098, 6, 2012, 9, 'Auriculares Bluetooth X', 'Auriculares', 150, 60, 900),
+('2024-01-19', 1099, 9, 2013, 14, 'Ratón Gaming 16000 DPI', 'Ratones', 350, 15, 3150),
+('2024-01-20', 1100, 2, 2014, 15, 'Disco Duro Externo 1TB', 'Almacenamiento Externo', 120, 30, 240);
+
+INSERT INTO Facturas (
+    Numero_Factura, Producto, Apellido, Email, Fecha_Pedido, ID_User, ID_Pedido, Cantidad, Precio, Subtotal, Costo_Envio, Total_Con_Envio, Direccion, Departamento
+) VALUES
+(5000, 'Smartphone XYZ', 'Silva', 'federico.silva@example.com', '2024-01-01', 2009, 1080, 6, 800, 4800, 10, 4810, 'Av. Libertador 1234', 'Montevideo'),
+(5001, 'Smartphone ABC', 'Torres', 'paula.torres@example.com', '2024-01-02', 2010, 1081, 3, 1200, 3600, 15, 3615, 'Calle 18 de Julio 4567', 'Montevideo'),
+(5002, 'Tableta Pro 10', 'Castro', 'martin.castro@example.com', '2024-01-03', 2011, 1082, 2, 1500, 3000, 20, 3020, 'Rambla 123', 'Punta del Este'),
+(5003, 'Tableta Mini 7', 'Ramírez', 'beatriz.ramirez@example.com', '2024-01-04', 2012, 1083, 7, 100, 700, 15, 715, 'Calle Uruguay 789', 'Salto'),
+(5004, 'Laptop Gaming Ultra', 'Romero', 'lucas.rodriguez@example.com', '2024-01-05', 2013, 1084, 3, 400, 1200, 20, 1220, 'Av. Brasil 321', 'Paysandú'),
+(5005, 'Laptop Business 15', 'Castro', 'valentina.castro@example.com', '2024-01-06', 2014, 1085, 8, 600, 4800, 10, 4810, 'Calle Sarandí 654', 'Montevideo'),
+(5006, 'Monitor Curvo 32"', 'Pérez', 'juan.perez@example.com', '2024-01-07', 2001, 1087, 5, 500, 2500, 15, 2515, 'Av. Italia 876', 'Colonia'),
+(5007, 'Auriculares Bluetooth X', 'Gómez', 'ana.gomez@example.com', '2024-01-08', 2002, 1088, 4, 150, 600, 20, 620, 'Calle Artigas 432', 'Tacuarembó'),
+(5008, 'Auriculares In-Ear Y', 'Rodríguez', 'carlos.rodriguez@example.com', '2024-01-09', 2003, 1089, 6, 200, 1200, 10, 1210, 'Av. 18 de Julio 789', 'Rivera'),
+(5009, 'Teclado Mecánico RGB', 'Fernández', 'maria.fernandez@example.com', '2024-01-10', 2004, 1090, 4, 400, 1600, 20, 1620, 'Calle Treinta y Tres 321', 'Montevideo'),
+(5010, 'Router WiFi AC1200', 'González', 'javier.gonzalez@example.com', '2024-01-11', 2005, 1091, 2, 350, 700, 10, 710, 'Av. Rivera 654', 'Maldonado'),
+(5011, 'Extensor de Red WiFi', 'Martínez', 'lucia.martinez@example.com', '2024-01-12', 2006, 1092, 7, 900, 6300, 15, 6315, 'Calle La Paz 789', 'Durazno'),
+(5012, 'Cargador Rápido USB-C', 'López', 'pedro.lopez@example.com', '2024-01-13', 2007, 1093, 2, 1100, 2200, 20, 2220, 'Av. A. González 123', 'Montevideo'),
+(5013, 'Cable HDMI 2.1', 'Díaz', 'laura.diaz@example.com', '2024-01-14', 2008, 1094, 8, 130, 1040, 15, 1055, 'Calle Sarandí 456', 'Canelones'),
+(5014, 'Smartphone XYZ', 'Silva', 'federico.silva@example.com', '2024-01-15', 2009, 1095, 1, 800, 800, 20, 820, 'Av. General Flores 789', 'San José'),
+(5015, 'Smartphone ABC', 'Torres', 'paula.torres@example.com', '2024-01-16', 2010, 1096, 5, 1200, 6000, 10, 6010, 'Calle 8 de Octubre 654', 'Montevideo'),
+(5016, 'Monitor Curvo 32"', 'Castro', 'martin.castro@example.com', '2024-01-17', 2011, 1097, 4, 500, 2000, 20, 2020, 'Av. del Libertador 321', 'Treinta y Tres'),
+(5017, 'Auriculares Bluetooth X', 'Ramírez', 'beatriz.ramirez@example.com', '2024-01-18', 2012, 1098, 6, 150, 900, 10, 910, 'Calle Zorrilla 123', 'Paysandú'),
+(5018, 'Ratón Gaming 16000 DPI', 'Romero', 'lucas.rodriguez@example.com', '2024-01-19', 2013, 1099, 9, 350, 3150, 15, 3165, 'Av. José Batlle y Ordóñez', 'Montevideo'),
+(5019, 'Disco Duro Externo 1TB', 'Castro', 'valentina.castro@example.com', '2024-01-20', 2014, 1100, 2, 120, 240, 20, 260, 'Calle Yaguarón 789', 'Artigas');
+
+
+INSERT INTO Envíos (
+    ID_Pedido, Código_Envío, Fecha_Pedido, Fecha_Envío, Estado_Envío, Empresa_Envío
+) VALUES
+(1080, 500000, '2024-01-01', '2024-01-03', 'En Camino', 'Uruguayan Express'),
+(1081, 500001, '2024-01-02', '2024-01-04', 'En Camino', 'Montevideo Courier'),
+(1082, 500002, '2024-01-03', '2024-01-05', 'Entregado', 'Uruguay Shipping Co.'),
+(1083, 500003, '2024-01-04', '2024-01-07', 'Demorado', 'FastTrack Uruguay'),
+(1084, 500004, '2024-01-05', '2024-01-08', 'En Camino', 'QuickShip Uruguay'),
+(1085, 500005, '2024-01-06', '2024-01-09', 'Entregado', 'Nacional Envíos'),
+(1087, 500006, '2024-01-07', '2024-01-10', 'Demorado', 'RapidExpress Uruguay'),
+(1088, 500007, '2024-01-08', '2024-01-11', 'En Camino', 'Uruguay Freight Services'),
+(1089, 500008, '2024-01-09', '2024-01-12', 'Entregado', 'ExpressLog Uruguay'),
+(1090, 500009, '2024-01-10', '2024-01-13', 'Demorado', 'Uruguayan Cargo'),
+(1091, 500010, '2024-01-11', '2024-01-15', 'En Camino', 'Montevideo Logistics'),
+(1092, 500011, '2024-01-12', '2024-01-16', 'Entregado', 'Uruguay Fast Delivery'),
+(1093, 500012, '2024-01-13', '2024-01-17', 'Demorado', 'Reliable Uruguayan Shipping'),
+(1094, 500013, '2024-01-14', '2024-01-18', 'En Camino', 'SwiftShip Uruguay'),
+(1095, 500014, '2024-01-15', '2024-01-19', 'Entregado', 'Uruguayan Transport Solutions'),
+(1096, 500015, '2024-01-16', '2024-01-20', 'Demorado', 'ExpressWay Uruguay'),
+(1097, 500016, '2024-01-17', '2024-01-22', 'En Camino', 'QuickTransit Uruguay'),
+(1098, 500017, '2024-01-18', '2024-01-23', 'Entregado', 'Uruguayan Parcel Services'),
+(1099, 500018, '2024-01-19', '2024-01-24', 'Demorado', 'National Express Uruguay'),
+(1100, 500019, '2024-01-20', '2024-01-25', 'En Camino', 'RapidRoute Uruguay');
+
+INSERT INTO detalle_del_pedido (
+    ID_Pedido, Cantidad, nombre, ID_Categoria, Precio, Fecha_Pedido, Fecha_Envio, Estado_Envio, Metodo_Envio, Costo_Envío, Subtotal, Total_Con_Envío, Metodo_Pago, Direccion, Departamento
+) VALUES
+(1080, 6, 'Smartphone XYZ', 201, 800, '2024-01-01', '2024-01-03', 'En Camino', 'Envío estándar', 10, 4800, 4810, 'Transferencia Bancaria Bradesco', 'Av. Libertador 1234', 'Montevideo'),
+(1081, 3, 'Smartphone ABC', 201, 1200, '2024-01-02', '2024-01-04', 'En Camino', 'Envío prioritario', 15, 3600, 3615, 'Tarjeta de Crédito Bradesco', 'Calle 18 de Julio 4567', 'Montevideo'),
+(1082, 2, 'Tableta Pro 10', 202, 1500, '2024-01-03', '2024-01-05', 'Entregado', 'Envío exprés', 20, 3000, 3020, 'Tarjeta de Débito Bradesco', 'Rambla 123', 'Punta del Este'),
+(1083, 7, 'Tableta Mini 7', 202, 100, '2024-01-04', '2024-01-07', 'Demorado', 'Envío prioritario', 15, 700, 715, 'Tarjeta Prepaga Banco do Brasil', 'Calle Uruguay 789', 'Salto'),
+(1084, 3, 'Laptop Gaming Ultra', 203, 400, '2024-01-05', '2024-01-08', 'En Camino', 'Envío exprés', 20, 1200, 1220, 'Transferencia Bancaria BBVA', 'Av. Brasil 321', 'Paysandú'),
+(1085, 8, 'Laptop Business 15', 203, 600, '2024-01-06', '2024-01-09', 'Entregado', 'Envío estándar', 10, 4800, 4810, 'Tarjeta de Crédito HSBC', 'Calle Sarandí 654', 'Montevideo'),
+(1087, 5, 'Monitor Curvo 32"', 204, 500, '2024-01-07', '2024-01-10', 'Demorado', 'Envío prioritario', 15, 2500, 2515, 'Tarjeta de Débito HSBC', 'Av. Italia 876', 'Colonia'),
+(1088, 4, 'Auriculares Bluetooth X', 205, 150, '2024-01-08', '2024-01-11', 'En Camino', 'Envío exprés', 20, 600, 620, 'Tarjeta Prepaga HSBC', 'Calle Artigas 432', 'Tacuarembó'),
+(1089, 6, 'Auriculares In-Ear Y', 205, 200, '2024-01-09', '2024-01-12', 'Entregado', 'Envío estándar', 10, 1200, 1210, 'Transferencia Bancaria Caixa Econômica', 'Av. 18 de Julio 789', 'Rivera'),
+(1090, 4, 'Teclado Mecánico RGB', 206, 400, '2024-01-10', '2024-01-13', 'Demorado', 'Envío exprés', 20, 1600, 1620, 'Tarjeta de Débito Caixa Econômica', 'Calle Treinta y Tres 321', 'Montevideo'),
+(1091, 2, 'Router WiFi AC1200', 211, 350, '2024-01-11', '2024-01-15', 'En Camino', 'Envío estándar', 10, 700, 710, 'Tarjeta Prepaga Caixa Econômica', 'Av. Rivera 654', 'Maldonado'),
+(1092, 7, 'Extensor de Red WiFi', 211, 900, '2024-01-12', '2024-01-16', 'Entregado', 'Envío prioritario', 15, 6300, 6315, 'Transferencia Bancaria Banco Popular', 'Calle La Paz 789', 'Durazno'),
+(1093, 2, 'Cargador Rápido USB-C', 212, 1100, '2024-01-13', '2024-01-17', 'Demorado', 'Envío exprés', 20, 2200, 2220, 'Tarjeta de Crédito Banco Popular', 'Av. A. González 123', 'Montevideo'),
+(1094, 8, 'Cable HDMI 2.1', 212, 130, '2024-01-14', '2024-01-18', 'En Camino', 'Envío prioritario', 15, 1040, 1055, 'Tarjeta de Débito Bradesco', 'Calle Sarandí 456', 'Canelones'),
+(1095, 1, 'Smartphone XYZ', 201, 800, '2024-01-15', '2024-01-19', 'Entregado', 'Envío exprés', 20, 800, 820, 'Tarjeta Prepaga Banco do Brasil', 'Av. General Flores 789', 'San José'),
+(1096, 5, 'Smartphone ABC', 201, 1200, '2024-01-16', '2024-01-20', 'Demorado', 'Envío estándar', 10, 6000, 6010, 'Transferencia Bancaria BBVA', 'Calle 8 de Octubre 654', 'Montevideo'),
+(1097, 4, 'Monitor Curvo 32"', 204, 500, '2024-01-17', '2024-01-22', 'En Camino', 'Envío exprés', 20, 2000, 2020, 'Tarjeta de Crédito HSBC', 'Av. del Libertador 321', 'Treinta y Tres'),
+(1098, 6, 'Auriculares Bluetooth X', 205, 150, '2024-01-18', '2024-01-23', 'Entregado', 'Envío estándar', 10, 900, 910, 'Tarjeta de Débito HSBC', 'Calle Zorrilla 123', 'Paysandú'),
+(1099, 9, 'Ratón Gaming 16000 DPI', 207, 350, '2024-01-19', '2024-01-24', 'Demorado', 'Envío prioritario', 15, 3150, 3165, 'Tarjeta Prepaga HSBC', 'Av. José Batlle y Ordóñez', 'Montevideo'),
+(1100, 2, 'Disco Duro Externo 1TB', 208, 120, '2024-01-20', '2024-01-25', 'En Camino', 'Envío exprés', 20, 240, 260, 'Tarjeta Prepaga HSBC', 'Calle Yaguarón 789', 'Artigas');
+
+Use katstore;
+CREATE VIEW Productos_Stock AS
+SELECT ID_Producto, producto, Stock
+FROM productos
+WHERE Stock < 20;
+CREATE VIEW Producto_Mas_Vendido AS
+SELECT 
+    ID_Producto, 
+    nombre AS Producto, 
+    SUM(Cantidad) AS Total_Vendido
+FROM 
+    pedidos
+GROUP BY 
+    ID_Producto, 
+    nombre
+ORDER BY 
+    Total_Vendido DESC
+LIMIT 1;
+
+CREATE VIEW Top_5_Productos_Mas_Vendidos AS
+SELECT 
+    ID_Producto, 
+    nombre AS Producto, 
+    SUM(Cantidad) AS Total_Vendido
+FROM 
+    pedidos
+GROUP BY 
+    ID_Producto, 
+    nombre
+ORDER BY 
+    Total_Vendido DESC
+LIMIT 5;
+
+CREATE VIEW Departamentos_Mas_Envios AS
+SELECT
+    f.Departamento,
+    COUNT(p.ID_Pedido) AS Total_Envios
+FROM
+    Pedidos
+JOIN
+    Facturas f ON p.ID_Pedido = f.ID_Pedido
+GROUP BY
+    f.Departamento
+ORDER BY
+    Total_Envios DESC;
+    
+CREATE VIEW VistaMetodoDePagoMasUsado AS
+SELECT 
+    Metodo_Pago,
+    COUNT(*) AS Cantidad_Usos
+FROM 
+    detalle_del_pedido
+GROUP BY 
+    Metodo_Pago
+ORDER BY 
+    Cantidad_Usos DESC
+LIMIT 1;
+   Use katstore
+DELIMITER //
+
+CREATE FUNCTION UsuariosPorDepartamento(depto_param VARCHAR(255))
+RETURNS INT
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+    DECLARE total_usuarios INT;
+
+    SELECT COUNT(*) INTO total_usuarios
+    FROM usuarios
+    WHERE departamento = depto_param;
+
+    RETURN total_usuarios;
+END //
+
+DELIMITER //
+
+DELIMITER //
+
+CREATE FUNCTION ContarStockPorProducto(id_producto_param INT)
+RETURNS INT
+DETERMINISTIC
+READS SQL DATA
+BEGIN
+    DECLARE stock_disponible INT;
+
+    SELECT stock INTO stock_disponible
+    FROM productos
+    WHERE id_producto = id_producto_param;
+
+    RETURN stock_disponible;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE ActualizarStock(
+    IN p_id_producto INT,
+    IN p_cantidad INT
+)
+BEGIN
+    IF EXISTS (SELECT 1 FROM productos WHERE id_producto = p_id_producto) THEN
+        UPDATE productos
+        SET stock = p_cantidad
+        WHERE id_producto = p_id_producto;
+    ELSE
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Producto no encontrado.';
+    END IF;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE ObtenerDetallesEnvioPorID(IN pedido_id INT)
+BEGIN
+    SELECT 
+        `ID_pedido`,
+        `Código_envío`,
+        `Fecha_Pedido`,
+        `Fecha_Envío`,
+        `Estado_Envío`,
+        `Empresa_envío`
+    FROM 
+       envíos
+    WHERE 
+        `ID_pedido` = pedido_id;
+END //
+
+DELIMITER ;
+
+Use katstore
+DELIMITER //
+
+CREATE TRIGGER notificar_cambio_telefono
+AFTER UPDATE ON usuarios
+FOR EACH ROW
+BEGIN
+    IF OLD.Telefono <> NEW.Telefono THEN
+        INSERT INTO notificaciones (ID_usuario, mensaje)
+        VALUES (NEW.ID_usuario, CONCAT('El número de teléfono del usuario con ID ', NEW.ID_usuario, ' ha sido actualizado.'));
+    END IF;
+END//
+
+DELIMITER ;
+DELIMITER //
+
+CREATE TRIGGER validar_cantidad_pedido
+BEFORE INSERT ON pedidos
+FOR EACH ROW
+BEGIN
+    IF NEW.Cantidad <= 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La cantidad del pedido debe ser mayor que cero.';
+    END IF;
+END//
+
+CREATE TRIGGER validar_cantidad_pedido_update
+BEFORE UPDATE ON pedidos
+FOR EACH ROW
+BEGIN
+    IF NEW.Cantidad <= 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'La cantidad del pedido debe ser mayor que cero.';
+    END IF;
+END//
+
+DELIMITER ;
